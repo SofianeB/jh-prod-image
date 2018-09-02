@@ -126,27 +126,13 @@ RUN conda install -c conda-forge anaconda=custom basemap
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_USER
 
-RUN echo 'export OPH_TERM_PS1=yellow' >> ~/.bashrc
-RUN echo 'export OPH_SERVER_HOST=ecas-server.dkrz.de' >> ~/.bashrc
-RUN echo 'export OPH_SERVER_PORT=11732' >> ~/.bashrc
-RUN echo 'export OPH_RESPONSE_BUFFER=6144' >> ~/.bashrc
-RUN echo 'export OPH_WORKFLOW_AUTOVIEW=on' >> ~/.bashrc
-RUN echo 'export OPH_TERM_IMGS=save' >> ~/.bashrc
 RUN echo 'export DISPLAY=Localhost:10.0' >> ~/.bashrc
-RUN echo 'export OPH_CWD=/home/jovyan/work/' >> ~/.bashrc
 
 #RUN echo 'if [ $(whoami) == jovyan ]; then oph_term; exit' >> ~/.bashrc
 
 RUN echo 'fi' >> ~/.bashrc
 
-ENV OPH_TERM_PS1=$OPH_TERM_PS1
-ENV OPH_SERVER_HOST=$OPH_SERVER_HOST
-ENV OPH_SERVER_PORT=$OPH_SERVER_PORT
-ENV OPH_RESPONSE_BUFFER=$OPH_RESPONSE_BUFFER
-ENV OPH_WORKFLOW_AUTOVIEW=$OPH_WORKFLOW_AUTOVIEW
-ENV OPH_TERM_IMGS=$OPH_TERM_IMGS
 ENV DISPLAY=$DISPLAY
-ENV OPH_CWD=$OPH_CWD
 
 RUN chown -R jovyan: /home/jovyan/work
 
