@@ -1,0 +1,6 @@
+Type: Jupyter Notebook Extension
+Compatibility: Jupyter 4.x, 5.x
+Name: Spell-Check Markdown
+Main: main.js
+Description: adds a spell-check button for turning on/off spelling checker
+Icon: spell-check.png

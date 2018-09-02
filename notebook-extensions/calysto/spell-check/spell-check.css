@@ -1,0 +1,15 @@
+/**
+ * Calysto Jupyter Notebooks Extensions
+ *
+ * Copyright (c) The Calysto Project
+ * http://github.com/Calysto/notebook-extensions
+ *
+ * Released under the BSD Simplified License
+ *
+ **/
+
+/* This is for spell-check: */
+
+.CodeMirror .cm-spell-error {
+     background: url('typo/red-wavy-underline.gif') bottom repeat-x;
+}
