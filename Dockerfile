@@ -74,8 +74,8 @@ RUN cd /tmp && \
 
 # Install Jupyter Notebook and Hub
 RUN conda install --quiet --yes \
-    'notebook=5.5.*' \
-    'jupyterhub=0.9.*' \
+    'notebook=5.4.*' \
+    'jupyterhub=0.8.*' \
     'jupyterlab=0.32.*' && \
     conda clean -tipsy && \
     jupyter labextension install @jupyterlab/hub-extension@^0.8.1 && \
@@ -108,31 +108,45 @@ COPY jupyter_notebook_config.py /etc/jupyter/
 RUN fix-permissions /etc/jupyter/
 
 
-#RUN wget --no-check-certificate https://download.ophidia.cmcc.it/rpm/1.2/ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm https://download.ophidia.cmcc.it/rpm/1.2/ophidia-primitives-1.2.0-0.el7.centos.x86_64.rpm
+RUN wget --no-check-certificate https://download.ophidia.cmcc.it/rpm/1.2/ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm https://download.ophidia.cmcc.it/rpm/1.2/ophidia-primitives-1.2.0-0.el7.centos.x86_64.rpm
 
-#RUN yum -y install \
-#    ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm \
-#    ophidia-primitives-1.2.0-0.el7.centos.x86_64.rpm && \
-#    yum clean all
+RUN yum -y install \
+    ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm \
+    ophidia-primitives-1.2.0-0.el7.centos.x86_64.rpm && \
+    yum clean all
 
-#RUN rm ophidia-primitives-1.2.0-0.el7.centos.x86_64.rpm
+RUN rm ophidia-primitives-1.2.0-0.el7.centos.x86_64.rpm
 
-#RUN rm ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm
+RUN rm ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm
 
 RUN conda install -c conda-forge proj4
 
-RUN conda install -c conda-forge anaconda=custom basemap
+RUN conda install -c anaconda basemap
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_USER
 
+RUN echo 'export OPH_TERM_PS1=yellow' >> ~/.bashrc
+RUN echo 'export OPH_SERVER_HOST=ecas-server.dkrz.de' >> ~/.bashrc
+RUN echo 'export OPH_SERVER_PORT=11732' >> ~/.bashrc
+RUN echo 'export OPH_RESPONSE_BUFFER=6144' >> ~/.bashrc
+RUN echo 'export OPH_WORKFLOW_AUTOVIEW=on' >> ~/.bashrc
+RUN echo 'export OPH_TERM_IMGS=save' >> ~/.bashrc
 RUN echo 'export DISPLAY=Localhost:10.0' >> ~/.bashrc
+RUN echo 'export OPH_CWD=/home/jovyan/work/' >> ~/.bashrc
 
 #RUN echo 'if [ $(whoami) == jovyan ]; then oph_term; exit' >> ~/.bashrc
 
 RUN echo 'fi' >> ~/.bashrc
 
+ENV OPH_TERM_PS1=$OPH_TERM_PS1
+ENV OPH_SERVER_HOST=$OPH_SERVER_HOST
+ENV OPH_SERVER_PORT=$OPH_SERVER_PORT
+ENV OPH_RESPONSE_BUFFER=$OPH_RESPONSE_BUFFER
+ENV OPH_WORKFLOW_AUTOVIEW=$OPH_WORKFLOW_AUTOVIEW
+ENV OPH_TERM_IMGS=$OPH_TERM_IMGS
 ENV DISPLAY=$DISPLAY
+ENV OPH_CWD=$OPH_CWD
 
 RUN chown -R jovyan: /home/jovyan/work
 
