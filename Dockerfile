@@ -74,8 +74,8 @@ RUN cd /tmp && \
 
 # Install Jupyter Notebook and Hub
 RUN conda install --quiet --yes \
-    'notebook=5.4.*' \
-    'jupyterhub=0.8.*' \
+    'notebook=5.5.*' \
+    'jupyterhub=0.9.*' \
     'jupyterlab=0.32.*' && \
     conda clean -tipsy && \
     jupyter labextension install @jupyterlab/hub-extension@^0.8.1 && \
