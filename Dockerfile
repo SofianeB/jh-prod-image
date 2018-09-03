@@ -121,7 +121,7 @@ RUN rm ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm
 
 RUN conda install -c conda-forge proj4
 
-RUN conda install -c anaconda basemap
+RUN conda install basemap -c anaconda 
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_USER
