@@ -94,9 +94,7 @@ WORKDIR $HOME
 
 # Install PyOphidia and matplotlib
 RUN pip install --upgrade pip &&\
-    pip install pyophidia &&\
-    pip install matplotlib &&\
-    pip install numpy
+    pip install pyophidia
 
 # Configure container startup
 ENTRYPOINT ["tini", "--"]
@@ -109,39 +107,28 @@ COPY start-singleuser.sh /usr/local/bin/
 COPY jupyter_notebook_config.py /etc/jupyter/
 RUN fix-permissions /etc/jupyter/
 
+RUN wget --no-check-certificate https://download.ophidia.cmcc.it/rpm/1.2/ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm
+
+RUN yum -y install ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm
+
+RUN rm ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm
+
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_USER
-
-RUN echo 'export OPH_TERM_PS1=yellow' >> ~/.bashrc
-RUN echo 'export OPH_SERVER_HOST=ecas-server.dkrz.de' >> ~/.bashrc
-RUN echo 'export OPH_SERVER_PORT=11732' >> ~/.bashrc
-RUN echo 'export OPH_RESPONSE_BUFFER=6144' >> ~/.bashrc
-RUN echo 'export OPH_WORKFLOW_AUTOVIEW=on' >> ~/.bashrc
-RUN echo 'export OPH_TERM_IMGS=save' >> ~/.bashrc
-RUN echo 'export DISPLAY=Localhost:10.0' >> ~/.bashrc
-RUN echo 'export OPH_CWD=/home/jovyan/work/' >> ~/.bashrc
 
 RUN echo 'if [ $(whoami) == jovyan ]; then oph_term; exit' >> ~/.bashrc
 
 RUN echo 'fi' >> ~/.bashrc
 
-ENV OPH_TERM_PS1=$OPH_TERM_PS1
-ENV OPH_SERVER_HOST=$OPH_SERVER_HOST
-ENV OPH_SERVER_PORT=$OPH_SERVER_PORT
-ENV OPH_RESPONSE_BUFFER=$OPH_RESPONSE_BUFFER
-ENV OPH_WORKFLOW_AUTOVIEW=$OPH_WORKFLOW_AUTOVIEW
-ENV OPH_TERM_IMGS=$OPH_TERM_IMGS
-ENV DISPLAY=$DISPLAY
-ENV OPH_CWD=$OPH_CWD
-
 RUN mkdir ~/.ipython/ && mkdir ~/.ipython/profile_default
+
 COPY ipython_config.py /home/jovyan/.ipython/profile_default/ipython_config.py
 
 RUN chown -R jovyan: /home/jovyan/work
 
 WORKDIR /home/jovyan/work
 
-RUN jupyter trust /home/jovyan/work/*.ipynb
+#RUN jupyter trust /home/jovyan/work/*.ipynb
 
 WORKDIR /home/jovyan
 
