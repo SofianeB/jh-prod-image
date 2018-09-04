@@ -108,12 +108,12 @@ COPY jupyter_notebook_config.py /etc/jupyter/
 RUN fix-permissions /etc/jupyter/
 
 
-RUN wget --no-check-certificate https://download.ophidia.cmcc.it/rpm/1.2/ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm https://download.ophidia.cmcc.it/rpm/1.2/ophidia-primitives-1.2.0-0.el7.centos.x86_64.rpm
+#RUN wget --no-check-certificate https://download.ophidia.cmcc.it/rpm/1.2/ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm https://download.ophidia.cmcc.it/rpm/1.2/ophidia-primitives-1.2.0-0.el7.centos.x86_64.rpm
 
-RUN yum -y install \
-    ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm \
-    ophidia-primitives-1.2.0-0.el7.centos.x86_64.rpm && \
-    yum clean all
+#RUN yum -y install \
+#    ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm \
+#    ophidia-primitives-1.2.0-0.el7.centos.x86_64.rpm && \
+#    yum clean all
 
 RUN rm ophidia-primitives-1.2.0-0.el7.centos.x86_64.rpm
 
@@ -121,7 +121,7 @@ RUN rm ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm
 
 RUN conda install -c conda-forge proj4
 
-RUN conda install basemap -c anaconda 
+RUN conda install -c conda-forge basemap=1.0.7
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_USER
