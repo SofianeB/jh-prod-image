@@ -74,8 +74,10 @@ RUN cd /tmp && \
 
 # Install Jupyter Notebook and Hub
 RUN conda install --quiet --yes \
+    'proj4' \
+    anaconda=custom basemap \
     'notebook=5.4.*' \
-    'jupyterhub=0.8.*' \
+    'jupyterhub=0.9.*' \
     'jupyterlab=0.32.*' && \
     conda clean -tipsy && \
     jupyter labextension install @jupyterlab/hub-extension@^0.8.1 && \
@@ -84,6 +86,8 @@ RUN conda install --quiet --yes \
     rm -rf /home/$NB_USER/.cache/yarn && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
+
+#RUN conda install --quiet --yes -c conda-forge anaconda=custom basemap
 
 USER root
 
@@ -115,13 +119,10 @@ RUN fix-permissions /etc/jupyter/
 #    ophidia-primitives-1.2.0-0.el7.centos.x86_64.rpm && \
 #    yum clean all
 
-RUN rm ophidia-primitives-1.2.0-0.el7.centos.x86_64.rpm
+#RUN rm ophidia-primitives-1.2.0-0.el7.centos.x86_64.rpm
 
-RUN rm ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm
+#RUN rm ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm
 
-RUN conda install -c conda-forge proj4
-
-RUN conda install -c conda-forge basemap=1.0.7
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_USER
@@ -137,7 +138,7 @@ RUN echo 'export OPH_CWD=/home/jovyan/work/' >> ~/.bashrc
 
 #RUN echo 'if [ $(whoami) == jovyan ]; then oph_term; exit' >> ~/.bashrc
 
-RUN echo 'fi' >> ~/.bashrc
+#RUN echo 'fi' >> ~/.bashrc
 
 ENV OPH_TERM_PS1=$OPH_TERM_PS1
 ENV OPH_SERVER_HOST=$OPH_SERVER_HOST
