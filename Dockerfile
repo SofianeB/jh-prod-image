@@ -75,7 +75,7 @@ RUN cd /tmp && \
 # Install Jupyter Notebook and Hub
 RUN conda install --quiet --yes \
     'proj4' \
-    anaconda=custom basemap \
+    'basemap=1.1.0=py36_4' \
     'notebook=5.4.*' \
     'jupyterhub=0.9.*' \
     'jupyterlab=0.32.*' && \
@@ -86,8 +86,6 @@ RUN conda install --quiet --yes \
     rm -rf /home/$NB_USER/.cache/yarn && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
-
-#RUN conda install --quiet --yes -c conda-forge anaconda=custom basemap
 
 USER root
 
@@ -111,19 +109,6 @@ COPY start-singleuser.sh /usr/local/bin/
 COPY jupyter_notebook_config.py /etc/jupyter/
 RUN fix-permissions /etc/jupyter/
 
-
-#RUN wget --no-check-certificate https://download.ophidia.cmcc.it/rpm/1.2/ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm https://download.ophidia.cmcc.it/rpm/1.2/ophidia-primitives-1.2.0-0.el7.centos.x86_64.rpm
-
-#RUN yum -y install \
-#    ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm \
-#    ophidia-primitives-1.2.0-0.el7.centos.x86_64.rpm && \
-#    yum clean all
-
-#RUN rm ophidia-primitives-1.2.0-0.el7.centos.x86_64.rpm
-
-#RUN rm ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm
-
-
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_USER
 
@@ -136,9 +121,9 @@ RUN echo 'export OPH_TERM_IMGS=save' >> ~/.bashrc
 RUN echo 'export DISPLAY=Localhost:10.0' >> ~/.bashrc
 RUN echo 'export OPH_CWD=/home/jovyan/work/' >> ~/.bashrc
 
-#RUN echo 'if [ $(whoami) == jovyan ]; then oph_term; exit' >> ~/.bashrc
+RUN echo 'if [ $(whoami) == jovyan ]; then oph_term; exit' >> ~/.bashrc
 
-#RUN echo 'fi' >> ~/.bashrc
+RUN echo 'fi' >> ~/.bashrc
 
 ENV OPH_TERM_PS1=$OPH_TERM_PS1
 ENV OPH_SERVER_HOST=$OPH_SERVER_HOST
@@ -149,11 +134,12 @@ ENV OPH_TERM_IMGS=$OPH_TERM_IMGS
 ENV DISPLAY=$DISPLAY
 ENV OPH_CWD=$OPH_CWD
 
+RUN mkdir ~/.ipython/ && mkdir ~/.ipython/profile_default
+COPY ipython_config.py /home/jovyan/.ipython/profile_default/ipython_config.py
+
 RUN chown -R jovyan: /home/jovyan/work
 
 WORKDIR /home/jovyan/work
-
-COPY --chown=jovyan:1000 GettingStarted.ipynb /home/jovyan/work
 
 RUN jupyter trust /home/jovyan/work/*.ipynb
 
