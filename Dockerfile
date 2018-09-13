@@ -15,6 +15,7 @@ RUN yum -y update \
     ca-certificates \
     sudo \
     locales \
+    davfs2 \
     fonts-liberation \
     gcc
 
