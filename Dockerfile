@@ -57,6 +57,8 @@ USER $NB_UID
 RUN mkdir /home/$NB_USER/work && \
     fix-permissions /home/$NB_USER
 
+RUN usermod -a -G davfs2 jovyan
+
 # Install conda as jovyan and check the md5 sum provided on the download site
 ENV MINICONDA_VERSION 4.4.10
 RUN cd /tmp && \
@@ -138,3 +140,7 @@ ADD notebook-extensions /home/jovyan
 RUN jupyter nbextension install calysto --user
 
 RUN jupyter nbextension enable calysto/publish/main
+
+RUN mkdir /home/jovyan/work/conf
+
+RUN touch /home/jovyan/work/conf/.env
