@@ -51,7 +51,7 @@ RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
     fix-permissions $HOME && \
     fix-permissions $CONDA_DIR
 
-RUN usermod -a -G davfs2 jovyan
+#RUN usermod -a -G davfs2 jovyan
 
 USER $NB_UID
 
