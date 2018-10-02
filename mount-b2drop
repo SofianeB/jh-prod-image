@@ -1,0 +1,34 @@
+#!/bin/sh
+#export B2DROP_USER=$1
+#export B2DROP_PASSWORD=$2
+#export WEBDAV_URL=$1
+
+eval $(cat /home/jovyan/work/.env | sed -e /^$/d -e /^#/d -e 's/^/export /')
+
+# print ENV variables
+echo "User is $B2DROP_USER"
+echo "URL is $WEBDAV_URL"
+
+if [ -z "${B2DROP_USER}" ];
+then
+    echo "B2DROP_USER is unset or set to the empty string"
+fi
+
+if [ -z "${B2DROP_PASSWORD}" ];
+then
+    echo "B2DROP_PASSWORD is unset or set to the empty string"
+fi
+
+
+if [ ! -z "${B2DROP_USER}" -a ! -z "${B2DROP_PASSWORD}" ];
+then
+    # Create entry in secrets file
+    echo "$WEBDAV_URL $B2DROP_USER $B2DROP_PASSWORD" | sudo tee -a /etc/davfs2/secrets
+    #echo "$WEBDAV_URL $B2DROP_USER $B2DROP_PASSWORD" >> /etc/davfs2/secrets
+
+    # make dir for mount
+    mkdir -p ~/work/b2drop-private
+
+    # mount b2drop to dir
+    sudo mount.davfs $WEBDAV_URL ~/work/b2drop-private
+fi
