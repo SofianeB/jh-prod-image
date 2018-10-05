@@ -7,8 +7,9 @@ USER root
 # Install all OS dependencies for notebook server that starts but lacks all
 # features (e.g., download as all possible file formats)
 ENV DEBIAN_FRONTEND noninteractive
-RUN yum -y update \
- && yum install -yq \
+RUN yum -y update && \
+   yum install -y epel-release && \
+    yum install -yq \
     wget \
     make \
     bzip2 \
@@ -110,25 +111,50 @@ COPY mount-b2drop /usr/local/bin
 COPY start-singleuser.sh /usr/local/bin/
 COPY jupyter_notebook_config.py /etc/jupyter/
 RUN fix-permissions /etc/jupyter/
-
+RUN chown jovyan:users /usr/local/bin/mount-b2drop
+RUN chmod +x /usr/local/bin/mount-b2drop
 RUN wget --no-check-certificate https://download.ophidia.cmcc.it/rpm/1.2/ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm
 
 RUN yum -y install ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm
 
 RUN rm ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm
 
+RUN echo "jovyan ALL = NOPASSWD: /bin/mount" >> /etc/sudoers
+
+RUN echo "jovyan ALL = NOPASSWD: /usr/local/bin/mount-b2drop" >> /etc/sudoers
+
+RUN echo "jovyan ALL = NOPASSWD: /sbin/mount.davfs" >> /etc/sudoers
+
+RUN echo "jovyan ALL = NOPASSWD: /usr/bin/tee" >> /etc/sudoers
+
+RUN usermod -aG davfs2 jovyan
+
+RUN setfacl -m u:jovyan:rw /etc/davfs2/secrets
+
+RUN setfacl -m o::rw /etc/davfs2/secrets
+
+RUN setfacl -m o::rw /etc/davfs2/davfs2.conf
+
+RUN echo "use_locks 0" >> /etc/davfs2/davfs2.conf
+
+RUN chmod 600 /etc/davfs2/secrets
+
+#RUN chown jovyan:users /etc/davfs2/secrets
+
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_USER
 
-RUN echo 'if [ $(whoami) == jovyan ]; then oph_term; exit' >> ~/.bashrc
+#RUN echo 'if [ $(whoami) == jovyan ]; then oph_term; exit' >> ~/.bashrc
 
-RUN echo 'fi' >> ~/.bashrc
+#RUN echo 'fi' >> ~/.bashrc
 
 RUN mkdir ~/.ipython/ && mkdir ~/.ipython/profile_default
 
 COPY ipython_config.py /home/jovyan/.ipython/profile_default/ipython_config.py
 
 RUN chown -R jovyan: /home/jovyan/work
+
+RUN touch /home/jovyan/work/.env
 
 WORKDIR /home/jovyan/work
 

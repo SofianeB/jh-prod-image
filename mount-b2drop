@@ -2,8 +2,11 @@
 #export B2DROP_USER=$1
 #export B2DROP_PASSWORD=$2
 #export WEBDAV_URL=$1
+export B2DROP_USER=$(sed -n '1 p' /home/jovyan/work/conf/env)
+export B2DROP_PASSWORD=$(sed -n '2 p' /home/jovyan/work/conf/env)
+export WEBDAV_URL='https://b2drop.eudat.eu/remote.php/webdav/'
 
-eval $(cat /home/jovyan/work/.env | sed -e /^$/d -e /^#/d -e 's/^/export /')
+#eval $(cat /home/jovyan/work/conf/env | sed -e /^$/d -e /^/d -e 's/^/export /')
 
 # print ENV variables
 echo "User is $B2DROP_USER"
