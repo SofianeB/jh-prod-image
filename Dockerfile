@@ -98,7 +98,9 @@ WORKDIR $HOME
 
 # Install PyOphidia and matplotlib
 RUN pip install --upgrade pip &&\
-    pip install pyophidia
+    pip install \
+        pyophidia \
+        ipywidgets
 
 # Configure container startup
 ENTRYPOINT ["tini", "--"]
@@ -113,6 +115,7 @@ COPY jupyter_notebook_config.py /etc/jupyter/
 RUN fix-permissions /etc/jupyter/
 RUN chown jovyan:users /usr/local/bin/mount-b2drop
 RUN chmod +x /usr/local/bin/mount-b2drop
+
 RUN wget --no-check-certificate https://download.ophidia.cmcc.it/rpm/1.2/ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm
 
 RUN yum -y install ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm
@@ -144,13 +147,15 @@ RUN chmod 600 /etc/davfs2/secrets
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_USER
 
-#RUN echo 'if [ $(whoami) == jovyan ]; then oph_term; exit' >> ~/.bashrc
+RUN echo 'if [ $(whoami) == jovyan ]; then oph_term; exit' >> ~/.bashrc
 
-#RUN echo 'fi' >> ~/.bashrc
+RUN echo 'fi' >> ~/.bashrc
 
 RUN mkdir ~/.ipython/ && mkdir ~/.ipython/profile_default
 
 COPY ipython_config.py /home/jovyan/.ipython/profile_default/ipython_config.py
+
+#COPY b2drop.service /etc/systemd/system/
 
 RUN chown -R jovyan: /home/jovyan/work
 
@@ -168,6 +173,12 @@ RUN jupyter nbextension install calysto --user
 
 RUN jupyter nbextension enable calysto/publish/main
 
+#RUN jupyter nbextension enable calysto/mount-b2drop/main
+
 RUN mkdir /home/jovyan/work/conf
 
 RUN touch /home/jovyan/work/conf/env
+
+COPY mount-b2drop.py /home/jovyan/work/conf
+
+COPY mount-your-b2drop.ipynb /homw/jovyan/work/conf
