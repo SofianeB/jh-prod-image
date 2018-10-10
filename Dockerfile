@@ -181,4 +181,4 @@ RUN touch /home/jovyan/work/conf/env
 
 COPY mount-b2drop.py /home/jovyan/work/conf
 
-COPY mount-your-b2drop.ipynb /homw/jovyan/work/conf
+COPY mount-your-b2drop.ipynb /home/jovyan/work/conf
