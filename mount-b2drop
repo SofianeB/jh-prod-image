@@ -34,4 +34,7 @@ then
 
     # mount b2drop to dir
     sudo mount.davfs $WEBDAV_URL ~/work/b2drop-private
+
+    # Add write access to jovyan
+    sudo chown -R jovyan ~/work/b2drop-private/
 fi

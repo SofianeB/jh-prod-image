@@ -130,6 +130,8 @@ RUN echo "jovyan ALL = NOPASSWD: /sbin/mount.davfs" >> /etc/sudoers
 
 RUN echo "jovyan ALL = NOPASSWD: /usr/bin/tee" >> /etc/sudoers
 
+RUN echo "jovyan ALL = NOPASSWD: /usr/bin/chown" >> /etc/sudoers
+
 RUN usermod -aG davfs2 jovyan
 
 RUN setfacl -m u:jovyan:rw /etc/davfs2/secrets
