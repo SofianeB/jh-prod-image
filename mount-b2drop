@@ -1,11 +1,11 @@
 #!/bin/sh
-# Author Sofiane Bendoukha
-export B2DROP_USER=$(sed -n '1 p' /home/jovyan/work/conf/env)
-export B2DROP_PASSWORD=$(sed -n '2 p' /home/jovyan/work/conf/env)
+
+export B2DROP_APP_USER=$(sed -n '1 p' /home/jovyan/work/conf/env)
+export B2DROP_APP_PASSWORD=$(sed -n '2 p' /home/jovyan/work/conf/env)
 export WEBDAV_URL='https://b2drop.eudat.eu/remote.php/webdav/'
 
 # print ENV variables
-echo "User is $B2DROP_USER"
+echo "User is $B2DROP_APP_USER"
 echo "URL is $WEBDAV_URL"
 
 if [ -z "${B2DROP_USER}" ];
@@ -13,17 +13,17 @@ then
     echo "B2DROP_USER is unset or set to the empty string"
 fi
 
-if [ -z "${B2DROP_PASSWORD}" ];
+if [ -z "${B2DROP_APP_PASSWORD}" ];
 then
-    echo "B2DROP_PASSWORD is unset or set to the empty string"
+    echo "B2DROP_APP_PASSWORD is unset or set to the empty string"
 fi
 
 
-if [ ! -z "${B2DROP_USER}" -a ! -z "${B2DROP_PASSWORD}" ];
+if [ ! -z "${B2DROP_APP_USER}" -a ! -z "${B2DROP_APP_PASSWORD}" ];
 then
     # Create entry in secrets file
-    echo "$WEBDAV_URL $B2DROP_USER $B2DROP_PASSWORD" | sudo tee -a /etc/davfs2/secrets
-    
+    echo "$WEBDAV_URL $B2DROP_APP_USER $B2DROP_APP_PASSWORD" | sudo tee -a /etc/davfs2/secrets
+
     # make dir for mount
     mkdir -p ~/work/b2drop-private
 
