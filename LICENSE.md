@@ -1,6 +1,10 @@
-BSD 3-Clause License
+# Licensing terms
 
-Copyright (c) 2018, Sofiane Bendoukha
+This project is licensed under the terms of the Modified BSD License (also known as New or Revised or 3-Clause BSD), as follows:
+
+* Copyright (c) 2015-, Jupyter Development Team
+* Copyright (c) 2018, ECAS, Sofiane Bendoukha
+
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
