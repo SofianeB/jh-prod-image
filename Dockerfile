@@ -96,7 +96,7 @@ USER root
 EXPOSE 8888
 WORKDIR $HOME
 
-# Install PyOphidia and matplotlib
+# Install PyOphidia
 RUN pip install --upgrade pip &&\
     pip install \
         pyophidia \
@@ -157,15 +157,13 @@ RUN mkdir ~/.ipython/ && mkdir ~/.ipython/profile_default
 
 COPY ipython_config.py /home/jovyan/.ipython/profile_default/ipython_config.py
 
-#COPY b2drop.service /etc/systemd/system/
-
 RUN chown -R jovyan: /home/jovyan/work
 
 RUN touch /home/jovyan/work/.env
 
 WORKDIR /home/jovyan/work
 
-#RUN jupyter trust /home/jovyan/work/*.ipynb
+RUN jupyter trust /home/jovyan/work/*.ipynb
 
 WORKDIR /home/jovyan
 
