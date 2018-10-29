@@ -109,7 +109,7 @@ def publish(src, dst): \n\
     os.chmod(dst, stat.S_IRUSR | stat.S_IWUSR | stat.S_IROTH | stat.S_IRGRP) \n\
     print("Ok") \n\
 \n\
-publish("/home/jovyan/work' + '/' + path + '/' + filename + '", "/home/jovyan/work/b2drop+shared/' + filename + '")',
+publish("/home/jovyan/work' + '/' + path + '/' + filename + '", "/home/jovyan/work/b2drop-shared/' + filename + '")',
 							       callbacks, {silent: false});
 
 				return true;

@@ -19,9 +19,9 @@ RUN yum -y update && \
     davfs2 \
     fonts-liberation \
     gcc && \
-    yum clean all 
+    yum clean all
 
-RUN yum -y groupinstall "Development tools"
+#RUN yum -y groupinstall "Development tools"
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 
