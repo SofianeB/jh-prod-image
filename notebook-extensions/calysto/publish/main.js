@@ -66,7 +66,7 @@ define(["require"], function (require) {
 				    if ((out.content.name === "stdout") && (out.content.text.indexOf("Ok") !== -1)) {
 					var body = $('<div/>');
 					body.append($('<h4/>').text('Your notebook is now publicly available at:'));
-					var url = base_url + "/tree/b2drop/" + filename.replace(/ /g, "%20");
+					var url = base_url + "/tree/b2drop-shared/" + filename.replace(/ /g, "%20");
 					var link = $('<a target="_blank"/>').attr('href', url);
 					link.text(url);
 					body.append($('<p/>').html(link));
@@ -109,7 +109,7 @@ def publish(src, dst): \n\
     os.chmod(dst, stat.S_IRUSR | stat.S_IWUSR | stat.S_IROTH | stat.S_IRGRP) \n\
     print("Ok") \n\
 \n\
-publish("/home/jovyan/work' + '/' + path + '/' + filename + '", "/home/jovyan/work/b2drop/' + filename + '")',
+publish("/home/jovyan/work' + '/' + path + '/' + filename + '", "/home/jovyan/work/b2drop+shared/' + filename + '")',
 							       callbacks, {silent: false});
 
 				return true;

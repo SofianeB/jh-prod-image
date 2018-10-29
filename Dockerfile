@@ -6,9 +6,9 @@ USER root
 
 # Install all OS dependencies for notebook server that starts but lacks all
 # features (e.g., download as all possible file formats)
-ENV DEBIAN_FRONTEND noninteractive
+
 RUN yum -y update && \
-   yum install -y epel-release && \
+    yum install -y epel-release && \
     yum install -yq \
     wget \
     make \
@@ -18,7 +18,8 @@ RUN yum -y update && \
     locales \
     davfs2 \
     fonts-liberation \
-    gcc
+    gcc && \
+    yum clean all 
 
 RUN yum -y groupinstall "Development tools"
 
@@ -118,9 +119,8 @@ RUN chmod +x /usr/local/bin/mount-b2drop
 
 RUN wget --no-check-certificate https://download.ophidia.cmcc.it/rpm/1.2/ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm
 
-RUN yum -y install ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm
-
-RUN rm ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm
+RUN yum -y install ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm && \
+    rm ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm
 
 RUN echo "jovyan ALL = NOPASSWD: /bin/mount" >> /etc/sudoers
 
