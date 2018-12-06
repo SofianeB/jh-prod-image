@@ -81,8 +81,8 @@ RUN cd /tmp && \
 RUN conda install --quiet --yes \
     'proj4' \
     'basemap=1.1.0=py36_4' \
-    'notebook=5.4.*' \
-    'jupyterhub=0.9.*' \
+    'notebook=5.7.*' \
+    'jupyterhub=0.9.4' \
     'jupyterlab=0.32.*' && \
     conda clean -tipsy && \
     jupyter labextension install @jupyterlab/hub-extension@^0.8.1 && \
