@@ -80,7 +80,7 @@ RUN cd /tmp && \
 # Install Jupyter Notebook and Hub
 RUN conda install --quiet --yes \
     'proj4' \
-    'basemap=1.1.0=py36_4' \
+    'basemap' \
     'notebook=5.7.*' \
     'jupyterhub=0.9.4' \
     'jupyterlab=0.32.*' && \
@@ -91,6 +91,8 @@ RUN conda install --quiet --yes \
     rm -rf /home/$NB_USER/.cache/yarn && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
+
+ENV PROJ_LIB /opt/conda/share/proj/
 
 USER root
 
@@ -163,17 +165,17 @@ RUN touch /home/jovyan/work/.env
 
 WORKDIR /home/jovyan/work
 
-#RUN jupyter trust /home/jovyan/work/*.ipynb
+RUN jupyter trust /home/jovyan/work/*.ipynb
 
 WORKDIR /home/jovyan
 
 ADD notebook-extensions /home/jovyan
 
-RUN jupyter nbextension install calysto --user
+RUN jupyter nbextension install ecas --user
 
-RUN jupyter nbextension enable calysto/publish/main
+RUN jupyter nbextension enable ecas/publish/main
 
-#RUN jupyter nbextension enable calysto/mount-b2drop/main
+#RUN jupyter nbextension enable ecas/mount-b2drop/main
 
 RUN mkdir /home/jovyan/work/conf
 
