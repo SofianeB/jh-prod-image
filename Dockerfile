@@ -62,10 +62,10 @@ RUN mkdir /home/$NB_USER/work && \
     fix-permissions /home/$NB_USER
 
 # Install conda as jovyan and check the md5 sum provided on the download site
-ENV MINICONDA_VERSION 4.4.10
+ENV MINICONDA_VERSION 4.5.11
 RUN cd /tmp && \
     wget --quiet https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && \
-    echo "bec6203dbb2f53011e974e9bf4d46e93 *Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" | md5sum -c - && \
+    echo "e1045ee415162f944b6aebfe560b8fee *Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh" | md5sum -c - && \
     /bin/bash Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -f -b -p $CONDA_DIR && \
     rm Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && \
     $CONDA_DIR/bin/conda config --system --prepend channels conda-forge && \
@@ -77,15 +77,23 @@ RUN cd /tmp && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
+# Install Tini
+RUN conda install --quiet --yes 'tini=0.18.0' && \
+    conda list tini | grep tini | tr -s ' ' | cut -d ' ' -f 1,2 >> $CONDA_DIR/conda-meta/pinned && \
+    conda clean -tipsy && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
 # Install Jupyter Notebook and Hub
 RUN conda install --quiet --yes \
     'proj4' \
     'basemap' \
-    'notebook=5.7.*' \
+    'notebook=5.7.2*' \
     'jupyterhub=0.9.4' \
-    'jupyterlab=0.32.*' && \
+    'jupyterlab=0.35.4' && \
     conda clean -tipsy && \
-    jupyter labextension install @jupyterlab/hub-extension@^0.8.1 && \
+    conda build purge-all && \
+    jupyter labextension install @jupyterlab/hub-extension@^0.12.0 && \
     npm cache clean --force && \
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/$NB_USER/.cache/yarn && \
@@ -106,7 +114,7 @@ RUN pip install --upgrade pip &&\
         ipywidgets
 
 # Configure container startup
-ENTRYPOINT ["tini", "--"]
+ENTRYPOINT ["tini", "-g", "--"]
 CMD ["start-notebook.sh"]
 
 # Add local files as late as possible to avoid cache busting
@@ -149,7 +157,7 @@ RUN chmod 600 /etc/davfs2/secrets
 #RUN chown jovyan:users /etc/davfs2/secrets
 
 # Switch back to jovyan to avoid accidental container runs as root
-USER $NB_USER
+USER $NB_UID
 
 RUN echo 'if [ $(whoami) == jovyan ]; then oph_term; exit' >> ~/.bashrc
 
@@ -165,7 +173,7 @@ RUN touch /home/jovyan/work/.env
 
 WORKDIR /home/jovyan/work
 
-RUN jupyter trust /home/jovyan/work/*.ipynb
+#RUN jupyter trust /home/jovyan/work/*.ipynb
 
 WORKDIR /home/jovyan
 
