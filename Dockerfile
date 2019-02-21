@@ -172,8 +172,6 @@ RUN touch /home/jovyan/work/.env
 
 WORKDIR /home/jovyan/work
 
-RUN jupyter trust /home/jovyan/work/*.ipynb
-
 WORKDIR /home/jovyan
 
 ADD notebook-extensions /home/jovyan
