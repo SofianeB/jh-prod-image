@@ -126,10 +126,10 @@ RUN fix-permissions /etc/jupyter/
 RUN chown jovyan:users /usr/local/bin/mount-b2drop
 RUN chmod +x /usr/local/bin/mount-b2drop
 
-RUN wget --no-check-certificate https://download.ophidia.cmcc.it/rpm/1.2/ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm
+RUN wget --no-check-certificate https://download.ophidia.cmcc.it/rpm/1.5/ophidia-terminal-1.5.0-0.el7.centos.x86_64.rpm
 
-RUN yum -y install ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm && \
-    rm ophidia-terminal-1.2.0-0.el7.centos.x86_64.rpm
+RUN yum -y install ophidia-terminal-1.5.0-0.el7.centos.x86_64.rpm && \
+    rm ophidia-terminal-1.5.0-0.el7.centos.x86_64.rpm
 
 RUN echo "jovyan ALL = NOPASSWD: /bin/mount" >> /etc/sudoers
 
