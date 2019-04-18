@@ -110,7 +110,7 @@ WORKDIR $HOME
 # Install PyOphidia
 RUN pip install --upgrade pip &&\
     pip install \
-        pyophidia==1.8.0 \
+        pyophidia \
         ipywidgets
 
 # Configure container startup
