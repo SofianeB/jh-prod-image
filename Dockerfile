@@ -88,12 +88,14 @@ RUN conda install --quiet --yes 'tini=0.18.0' && \
 # Install Jupyter Notebook and Hub
 RUN conda install --quiet --yes \
     'proj4' \
-    'basemap' \
     'notebook=5.7.8' \
-    'jupyterhub=0.9.6' \
-    'jupyterlab=0.35.4' && \
+    'basemap' \
+    'tornado=5' \
+    'ipython>=7.0.0' \
+    'jupyterhub=1.0.0' \
+    'jupyterlab>=1.0' && \
     conda clean -tipsy && \
-    jupyter labextension install @jupyterlab/hub-extension@^0.12.0 && \
+    jupyter labextension install @jupyterlab/hub-extension@1.0.0 && \
     npm cache clean --force && \
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/$NB_USER/.cache/yarn && \
